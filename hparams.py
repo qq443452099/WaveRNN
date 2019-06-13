@@ -7,8 +7,8 @@ data_path = 'data/'
 
 # model ids are separate - that way you can use a new tts with an old wavernn and vice versa
 # NB: expect undefined behaviour if models were trained on different DSP settings
-voc_model_id = 'ljspeech_9bit_mulaw'
-tts_model_id = 'ljspeech_progressive'
+voc_model_id = 'ljspeech_mol'
+tts_model_id = 'ljspeech_lsa_smooth_attention'
 
 # set this to True if you are only interested in WaveRNN
 ignore_tts = False
@@ -27,7 +27,7 @@ fmin = 40
 min_level_db = -100
 ref_level_db = 20
 bits = 9                            # bit depth of signal
-mu_law = True                       # Recommended to suppress noise
+mu_law = True                       # Recommended to suppress noise if using raw bits in hp.voc_mode below
 peak_norm = False                   # Normalise to the peak of each wav file
 
 
@@ -35,6 +35,7 @@ peak_norm = False                   # Normalise to the peak of each wav file
 
 
 # Model Hparams
+voc_mode = 'MOL'                    # either 'RAW' (softmax on raw bits) or 'MOL' (sample from mixture of logistics)
 voc_upsample_factors = (5, 5, 11)   # NB - this needs to correctly factorise hop_length
 voc_rnn_dims = 512
 voc_fc_dims = 512
@@ -47,7 +48,7 @@ voc_batch_size = 32
 voc_lr = 1e-4
 voc_checkpoint_every = 25_000
 voc_gen_at_checkpoint = 5           # number of samples to generate at each checkpoint
-voc_total_steps = 500_000           # Total number of training steps
+voc_total_steps = 1_000_000         # Total number of training steps
 voc_test_samples = 50               # How many unseen samples to put aside for testing
 voc_pad = 2                         # this will pad the input so that the resnet can 'see' wider than input length
 voc_seq_len = hop_length * 5        # must be a multiple of hop_length
@@ -68,7 +69,7 @@ tts_encoder_dims = 128
 tts_decoder_dims = 256
 tts_postnet_dims = 128
 tts_encoder_K = 16
-tts_lstm_dims = 512                 # decoder LSTM dimensions
+tts_lstm_dims = 512
 tts_postnet_K = 8
 tts_num_highways = 4
 tts_dropout = 0.5
@@ -77,17 +78,15 @@ tts_cleaner_names = ['english_cleaners']
 # Training
 
 
-tts_schedule = [(10, 1e-4,  50_000,  32),   # progressive training schedule
-                (5,  1e-4, 100_000,  32),    # (r, lr, step, batch_size)
-                (2,  1e-4, 150_000,  16),
-                (1,  1e-4, 250_000,  8)]
-tts_batch_size = 8                  # This fits LJ-Speech into 8GB of GPU mem
-tts_lr = 1e-4
+tts_schedule = [(7,  1e-3,  10_000,  32),   # progressive training schedule
+                (5,  1e-4, 100_000,  32),   # (r, lr, step, batch_size)
+                (2,  1e-4, 180_000,  16),
+                (1,  1e-4, 350_000,  8)]
+
 tts_max_mel_len = 1250              # if you have a couple of extremely long spectrograms you might want to use this
 tts_bin_lengths = True              # bins the spectrogram lengths before sampling in data loader - speeds up training
 tts_clip_grad_norm = 1.0            # clips the gradient norm to prevent explosion - set to None if not needed
 tts_checkpoint_every = 2_000        # checkpoints the model every X steps
-tts_plot_every = 1_000              # how often to plot the attention
 # TODO: tts_phoneme_prob = 0.0              # [0 <-> 1] probability for feeding model phonemes vrs graphemes
 
 

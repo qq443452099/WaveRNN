@@ -2,6 +2,8 @@
 
 ##### (Update: Vanilla Tacotron One TTS system just implemented - more coming soon!)
 
+![Tacotron with WaveRNN diagrams](assets/tacotron_wavernn.png)
+
 Pytorch implementation of Deepmind's WaveRNN model from [Efficient Neural Audio Synthesis](https://arxiv.org/abs/1802.08435v1)
 
 # Installation
@@ -31,6 +33,7 @@ You can also use that script to generate custom tts sentences and/or use '-u' to
 
 
 ### Training your own Models
+![Attenion and Mel Training GIF](assets/training_viz.gif)
 
 Download the [LJSpeech](https://keithito.com/LJ-Speech-Dataset/) Dataset.
 
@@ -81,14 +84,22 @@ Currently there are two pretrained models available in the /pretrained/ folder':
 
 Both are trained on LJSpeech
 
-* WaveRNN trained to 800k steps (400k normal mels / 400k gta finetuned)
-* Tacotron(r=1) trained to 196k steps
+* WaveRNN (Mixture of Logistics output) trained to 800k steps 
+* Tacotron trained to 180k steps
 
-# Acknowledgments
+____
+
+### References
 
 * [Efficient Neural Audio Synthesis](https://arxiv.org/abs/1802.08435v1)
-* [keithito tacotron](https://github.com/keithito/tacotron)
-* Special thanks to github users [G-Wang](https://github.com/G-Wang), [geneing](https://github.com/geneing)
+* [Tacotron: Towards End-to-End Speech Synthesis](https://arxiv.org/abs/1703.10135)
+* [Natural TTS Synthesis by Conditioning WaveNet on Mel Spectrogram Predictions](https://arxiv.org/abs/1712.05884)
+
+### Acknowlegements
+
+* [https://github.com/keithito/tacotron](https://github.com/keithito/tacotron)
+* [https://github.com/r9y9/wavenet_vocoder](https://github.com/r9y9/wavenet_vocoder)
+* Special thanks to github users [G-Wang](https://github.com/G-Wang), [geneing](https://github.com/geneing) & [erogol](https://github.com/erogol)
 
 
 
